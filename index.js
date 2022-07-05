@@ -3,7 +3,7 @@ const port = 5000;
 const app = express();
 const parser= require('body-parser');
 
-app.use(parser.text())
+app.use(parser.json())
 app.use(parser.urlencoded({ extended: true }))
 
 app.get('/multiply/:id1/:id2', (req,res)=>{
@@ -20,20 +20,11 @@ app.get('/hello/:id', (req,res)=>{
 });
 
 app.post('/multiply', (req,res)=>{
-    let num=0;
-    let mult=1;
-    let data = req.body;
-    data = JSON.stringify(data);
-    for(i=0;i<data.length;i++){
-        if(data[i]>='0' && data[i]<='9')
-            num=num*10+(data[i]-'0');
-        if(data[i]==' '){
-            mult*=num;
-            num=0;
-        }
-    }
-    mult*=num;
-    res.json(mult);
+    let numbers = req.body.numbers;
+    let prod=1;
+    for(let num of numbers)
+        prod*=num;
+    res.json({result:prod});
 });
 
 app.listen(port, function() {
